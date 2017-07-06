@@ -1,4 +1,14 @@
-﻿CREATE FUNCTION toTbMasterQuestion(
+﻿CREATE OR REPLACE FUNCTION toDeleteEntryTbMasterQuestionGrade(
+p_id_master_question integer integer
+) RETURNS VOID AS
+$$
+BEGIN
+END;
+$$
+LANGUAGE sql STABLE;
+
+
+CREATE OR REPLACE FUNCTION toTbMasterQuestion(
   p_id_master_question integer,
   p_question_title text ,
   p_question_content text,
@@ -66,7 +76,7 @@ BEGIN
     END LOOP;
 END;
 $$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql STABLE;
 
 Select * from staging, totbmasterquestion(
     id_master_question,
