@@ -11,7 +11,8 @@
   p_question_title_bahasa character,
   p_question_content_bahasa text,
   p_question_title_chinese character,
-  p_question_content_chinese text 
+  p_question_content_chinese text
+  
 
 ) RETURNS VOID AS
 $$
@@ -30,7 +31,8 @@ BEGIN
             question_title_bahasa=p_question_title_bahasa,
             question_content_bahasa=p_question_content_bahasa ,
             question_title_chinese=p_question_title_chinese,
-            question_content_chinese=p_question_content_chinese 
+            question_content_chinese=p_question_content_chinese,
+            changed_date=now()  
 	WHERE 
 	id_master_question=p_id_master_question;
         IF found THEN
@@ -47,15 +49,16 @@ BEGIN
             question_title_bahasa,
             question_content_bahasa,
             question_title_chinese,
-            question_content_chinese )
+            question_content_chinese,
+            changed_date )
             VALUES (p_id_master_question, p_question_title, p_question_content,p_weight,p_created_by,p_is_na,p_changed_by,
             p_question_title_vietnamese,
             p_question_content_vietnamese,
             p_question_title_bahasa,
             p_question_content_bahasa,
             p_question_title_chinese,
-            p_question_content_chinese 
-            );
+            p_question_content_chinese, 
+            now());
             RETURN;
         EXCEPTION WHEN unique_violation THEN
             -- do nothing, and loop to try the UPDATE again
@@ -78,6 +81,7 @@ Select * from staging, totbmasterquestion(
     question_content_chinese
     );
 
+Select * from now();
 
 COPY staging
 FROM 'D:/Test3.csv'
