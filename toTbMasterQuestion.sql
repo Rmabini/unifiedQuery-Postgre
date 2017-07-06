@@ -1,9 +1,103 @@
-﻿
-SELECT id_master_template 
+﻿CREATE OR REPLACE FUNCTION toAddEntryTbMasterTemplateSection(
+p_id_master_template integer,
+p_id_master_section integer,
+p_section character,
+p_created_by character
+)
+RETURNS VOID AS
+$$
+BEGIN
+INSERT INTO tb_master_template_section(
+            id_master_template, id_master_section, section_name,  
+            created_date, created_by, changed_date, changed_by)
+    VALUES (p_id_master_template, p_id_master_section, p_section,  
+            now(), p_created_by, now(),  p_created_by);
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+CREATE OR REPLACE FUNCTION toDeleteMasterTemplateSection(
+p_id_master_section integer
+)RETURNS VOID AS
+$$
+DELETE FROM  tb_master_template_section 
+WHERE id_master_section=p_id_master_section
+$$
+LANGUAGE sql VOLATILE;
+
+CREATE OR REPLACE FUNCTION toAddTbMasterSectionQuestion(
+p_id_master_question integer,
+p_id_master_section integer,
+p_number integer,
+p_created_by character
+
+
+) RETURNS VOID AS
+$$
+BEGIN
+ INSERT INTO tb_master_section_question(
+            id_master_section, id_master_question, "number", created_date, 
+            created_by, changed_date, changed_by)
+    VALUES (p_id_master_section, p_id_master_question, p_number, now(), 
+            p_created_by, now(), p_created_by); 
+END
+$$
+LANGUAGE plpgsql VOLATILE;
+
+SELECT * FROM staging,
+toDeleteMasterQuestionSection(id_master_question), 
+getIdMasterSection(type,section) as id_master_section , 
+toMasterSectionQuestion(id_master_question,id_master_section,"number",'Roberto'),
+getIdMasterTemplate(type) as id_master_template,
+toDeleteMasterTemplateSection(id_master_section),
+toAddEntryTbMasterTemplateSection(id_master_template,id_master_section,section,'Roberto');
+
+
+CREATE OR REPLACE FUNCTION getIdMasterSection
+(type character, section character) RETURNS INTEGER AS
+$$
+DECLARE
+id integer;
+BEGIN
+SELECT id_master_section into id  FROM tb_master_section
+WHERE master_section_name ilike ('%' || type || '%' || section ) limit 1;
+IF FOUND  THEN
+       RETURN id;
+    END IF;
+    RETURN 0; 
+ END
+$$
+LANGUAGE plpgsql VOLATILE;
+
+SELECT * FROM getIdMasterSection('SUPERMARKET','A');
+
+
+CREATE OR REPLACE FUNCTION toDeleteMasterQuestionSection(p_id_master_question integer
+) RETURNS VOID AS
+$$
+DELETE FROM  tb_master_section_question 
+WHERE id_master_question=p_id_master_question
+$$
+LANGUAGE sql VOLATILE;
+
+CREATE OR REPLACE FUNCTION test(p_id_master_question integer)
+RETURNS TABLE(id_master_template integer, template_name text)  AS $$
+BEGIN
+  RETURN QUERY
+    SELECT a.id_master_template,a.template_name FROM  tb_master_template a WHERE a.id_master_template=p_id_master_question;
+   
+  RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+Select * from test(9);
+
+SELECT * 
 FROM tb_master_template 
 WHERE template_name ILIKE '%UPERMARKET%' limit 1 
 
-CREATE OR REPLACE FUNCTION getIdMasterTemplage
+CREATE OR REPLACE FUNCTION getIdMasterTemplate
 (type character) RETURNS INTEGER AS
 $$
 DECLARE
@@ -20,7 +114,7 @@ IF FOUND  THEN
 $$
 LANGUAGE plpgsql VOLATILE;
 
-Select * from getIdMasterTemplage('UPERMARKET') as id_master_template ;
+Select * from getIdMasterTemplage('cn') as id_master_template,test(id_master_template) ;
 
 
 CREATE OR REPLACE FUNCTION toAddEntryToTbMasterQuestionGrade(
