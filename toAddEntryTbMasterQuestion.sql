@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION toAddEntryTbMasterQuestion(
+CREATE OR REPLACE FUNCTION to_Add_Entry_Tb_Master_Question(
   p_id_master_question integer,
   p_question_title text ,
   p_question_content text,
@@ -66,4 +66,4 @@ BEGIN
     END LOOP;
 END;
 $$
-LANGUAGE plpgsql STABLE;
+LANGUAGE plpgsql;

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION toDeleteMasterQuestionSection(p_id_master_question integer
+CREATE OR REPLACE FUNCTION to_Delete_Master_Question_Section(p_id_master_question integer
 ) RETURNS VOID AS
 $$
 DELETE FROM  tb_master_section_question 

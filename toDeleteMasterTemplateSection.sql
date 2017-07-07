@@ -1,8 +1,5 @@
-CREATE OR REPLACE FUNCTION toDeleteMasterTemplateSection(
-p_id_master_section integer
-)RETURNS VOID AS
+CREATE OR REPLACE FUNCTION to_Delete_Master_Template_Section()RETURNS VOID AS
 $$
 DELETE FROM  tb_master_template_section 
-WHERE id_master_section=p_id_master_section
 $$
 LANGUAGE sql VOLATILE;

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION getIdMasterSection
+CREATE OR REPLACE FUNCTION get_Id_Master_Section
 (type character, section character) RETURNS INTEGER AS
 $$
 DECLARE

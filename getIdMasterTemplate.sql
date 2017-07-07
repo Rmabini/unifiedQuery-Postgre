@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION getIdMasterTemplate
+CREATE OR REPLACE FUNCTION get_Id_Master_Template
 (type character) RETURNS INTEGER AS
 $$
 DECLARE
